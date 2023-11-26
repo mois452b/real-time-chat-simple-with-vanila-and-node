@@ -7,6 +7,25 @@
             import { io } from 'https://cdn.socket.io/4.5.4/socket.io.esm.min.js';
 
             const socket = io( );
+
+            const form = document.querySelector( 'form' );
+            const message = document.querySelector( '#message' );
+            const messages = document.querySelector( '#messages' );
+
+            socket.on( 'message', ( msg ) => {
+                const li = document.createElement( 'li' );
+                li.textContent = msg;
+                messages.appendChild( li );
+                window.scrollTo( 0, document.body.scrollHeight );
+            })
+
+            form.addEventListener( 'submit', ( event ) => {
+                event.preventDefault( );
+                if( message.value ) {
+                    socket.emit( 'message', message.value );
+                    message.value = '';
+                }
+            })
         </script>
 
         <style>
@@ -38,11 +57,51 @@
                 height: 100%;
                 position: relative;
             }
+
+            form {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 4px;
+                display: flex;
+                height: 50px;
+            }
+
+            #message {
+                border-radius: 50px;
+                border: 1px solid black;
+                padding: 0 4px;
+                margin: 4px;
+                flex: 1;
+            }
+
+            #message:focus {
+                outline: none;
+            }
+
+            input[type="submit"] {
+                border-radius: 5px;
+                border: 1px solid black;
+                padding: 1px 7px;
+                margin: 4px;
+                background-color: lightgreen;
+            }
+
+            input[type="submit"]:hover {
+                background-color: green;
+            }
+
         </style>
     </head>
     <body>
         <section id="chat">
-            Chat
+            <ul id="messages">
+            </ul>
+            <form>
+                <input placeholder="write a message" name="message" id="message" />
+                <input type="submit" value="send" />
+            </form>
 
         </section>
     </body>
