@@ -6,17 +6,22 @@
         <script type="module" >
             import { io } from 'https://cdn.socket.io/4.5.4/socket.io.esm.min.js';
 
-            const socket = io( );
+            const socket = io({
+                auth: {
+                    serverOffset: 0
+                }
+            });
 
             const form = document.querySelector( 'form' );
             const message = document.querySelector( '#message' );
             const messages = document.querySelector( '#messages' );
 
-            socket.on( 'message', ( msg ) => {
+            socket.on( 'message', ( msg, serverOffset ) => {
                 const li = document.createElement( 'li' );
                 li.textContent = msg;
                 messages.appendChild( li );
                 window.scrollTo( 0, document.body.scrollHeight );
+                socket.auth.serverOffset = serverOffset;
             })
 
             form.addEventListener( 'submit', ( event ) => {
@@ -52,7 +57,7 @@
             #chat {
                 border: 1px solid black;
                 border-radius: 4px;
-                overflow: hidden;
+                overflow: auto;
                 width: 400px;
                 height: 100%;
                 position: relative;
