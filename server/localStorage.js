@@ -47,7 +47,7 @@ export class LocalStorageDatabase {
         this.setTable(tableName, updatedTable);
     }
 }
-  
+
 //   // Ejemplo de uso:
 // const db = new LocalStorageDatabase('myDatabase');
 
